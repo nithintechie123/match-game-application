@@ -7,7 +7,7 @@
   font-family: 'Roboto';
   outline: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 500;
   padding: 5px;
   padding-left: 10px;
@@ -18,4 +18,10 @@
 .border-and-font-color {
   border-bottom: 2px solid #fec653;
   color: #fec653;
+}
+
+@media screen and (min-width: 768px) {
+  .tab-button {
+    font-size: 20px;
+  }
 }

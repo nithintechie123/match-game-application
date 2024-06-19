@@ -56,7 +56,8 @@
   list-style-type: none;
   align-self: center;
   justify-content: space-around;
-  width: 300px;
+  width: 200px;
+  padding: 0px;
 }
 
 @media screen and (min-width: 768px) {
@@ -77,5 +78,8 @@
   .matching-image {
     width: 500px;
     margin-top: 15px;
+  }
+  .tabs-list-container {
+    width: 300px;
   }
 }
