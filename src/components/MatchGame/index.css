@@ -59,11 +59,63 @@
   width: 200px;
   padding: 0px;
 }
+.thumbnails-container {
+  list-style-type: none;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  width: 250px;
+  align-self: center;
+  flex-wrap: wrap;
+}
+
+.score-card-bg-image {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/match-game-score-card-sm-bg.png');
+  width: 30vh;
+  background-position: center;
+  height: 60vh;
+  background-size: cover;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.trophy-image {
+  width: 150px;
+}
+
+.final-score {
+  color: #ffffff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  text-align: center;
+  font-size: 18px;
+}
+
+.play-again-button {
+  background-color: #cf60c8;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 6px;
+  width: 120px;
+  height: 40px;
+  outline: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 15px;
+  border-width: 0px;
+}
 
 @media screen and (min-width: 768px) {
   .match-game-container {
     background-image: url('https://assets.ccbp.in/frontend/react-js/match-game-bg.png');
-    height: 100vh;
     background-size: cover;
   }
 
@@ -81,5 +133,41 @@
   }
   .tabs-list-container {
     width: 300px;
+  }
+  .thumbnails-container {
+    width: 500px;
+  }
+  .score-card-bg-image {
+    background-image: url('https://assets.ccbp.in/frontend/react-js/match-game-score-card-lg-bg.png');
+    width: 25%;
+    height: 70vh;
+    background-position: center;
+    background-size: cover;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .trophy-image {
+    width: 250px;
+    margin-top: 100px;
+  }
+  .final-score {
+    color: #ffffff;
+    font-family: 'Roboto';
+    font-weight: 500;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .play-again-button {
+    width: 120px;
+    height: 40px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 15px;
+    border-width: 0px;
   }
 }

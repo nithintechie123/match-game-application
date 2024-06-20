@@ -3,6 +3,7 @@ import {Component} from 'react'
 import TabItem from '../TabItem'
 
 import './index.css'
+import Thumbnails from '../Thumbnails'
 
 const tabsList = [
   {tabId: 'FRUIT', displayText: 'Fruits'},
@@ -249,27 +250,95 @@ const imagesList = [
   },
 ]
 
-const index = Math.floor(Math.random() * imagesList.length)
+const initialThumbnailsList = imagesList.filter(
+  eachThumbnailObject => eachThumbnailObject.category === 'FRUIT',
+)
 
-const displayRandomImageUrl = imagesList[index].imageUrl
+const initialState = {
+  activeTabId: tabsList[0].tabId,
+  activeImageId: imagesList[0].id,
+  activeTabThumbnailsList: initialThumbnailsList,
+  score: 0,
+  timer: 60,
+  gameResult: false,
+}
 
 class MatchGame extends Component {
   state = {
-    activeTabId: tabsList[0].tabId,
-    activeImageUrl: displayRandomImageUrl,
+    ...initialState,
+  }
+
+  componentDidMount() {
+    this.setTimerInterval()
+  }
+
+  componentWillUnmount() {
+    this.clearInterval(this.timerId)
+  }
+
+  setTimerInterval = () => {
+    this.timerId = setInterval(this.setTimer, 1000)
+  }
+
+  setTimer = () => {
+    const {timer} = this.state
+    if (timer > 0) {
+      this.setState({timer: timer - 1})
+    } else {
+      clearInterval(this.timerId)
+      this.setState({gameResult: true})
+    }
   }
 
   clickTabItem = id => {
     const filteredTabsList = tabsList.filter(eachTab => eachTab.tabId === id)
 
+    const thumbnailsList = imagesList.filter(
+      eachImage => eachImage.category === id,
+    )
+
     this.setState({
       activeTabId: filteredTabsList[0].tabId,
+      activeTabThumbnailsList: thumbnailsList,
     })
   }
 
+  clickedThumbnailItem = id => {
+    const {activeImageId} = this.state
+    if (activeImageId !== id) {
+      this.setState({gameResult: true, timer: 0})
+    } else {
+      this.generateRandomImage()
+    }
+  }
+
+  generateRandomImage = () => {
+    const {score} = this.state
+    const index = Math.floor(Math.random() * imagesList.length)
+
+    const randomImageId = imagesList[index].id
+    this.setState({activeImageId: randomImageId, score: score + 1})
+  }
+
+  onClickPlayAgain = () => {
+    this.setState({...initialState})
+    this.setTimerInterval()
+  }
+
   render() {
-    const {activeTabId, activeImageUrl} = this.state
-    console.log(activeTabId)
+    const {
+      activeTabId,
+      activeImageId,
+      activeTabThumbnailsList,
+      score,
+      timer,
+      gameResult,
+    } = this.state
+
+    const randomImageUrl = imagesList.find(
+      eachImage => eachImage.id === activeImageId,
+    )
+
     return (
       <div className="match-game-container">
         <nav className="nav-bar-container">
@@ -280,7 +349,7 @@ class MatchGame extends Component {
           />
           <div className="score-timer-container">
             <p className="score-text">
-              Score:<span className="span-element">10</span>
+              Score:<span className="span-element">{score}</span>
             </p>
             <div className="timer-container">
               <img
@@ -288,21 +357,61 @@ class MatchGame extends Component {
                 alt="timer"
                 className="timer-icon"
               />
-              <span className="span-element">3 sec</span>
+              <span className="span-element">{timer} sec</span>
             </div>
           </div>
         </nav>
-        <img src={activeImageUrl} alt="match" className="matching-image" />
-        <ul className="tabs-list-container">
-          {tabsList.map(eachTab => (
-            <TabItem
-              key={eachTab.tabId}
-              tabItemDetails={eachTab}
-              clickTabItem={this.clickTabItem}
-              isActive={activeTabId === eachTab.tabId}
+        {gameResult ? (
+          <div className="game-result-container score-card-bg-image">
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/match-game-trophy.png"
+              alt="trophy"
+              className="trophy-image"
             />
-          ))}
-        </ul>
+            <h1 className="final-score">
+              Your Score
+              <br /> {score}
+            </h1>
+            <button
+              type="button"
+              className="play-again-button"
+              onClick={this.onClickPlayAgain}
+            >
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/match-game-play-again-img.png"
+                alt="reset"
+              />
+              Play Again
+            </button>
+          </div>
+        ) : (
+          <>
+            <img
+              src={randomImageUrl.imageUrl}
+              alt="match"
+              className="matching-image"
+            />
+            <ul className="tabs-list-container">
+              {tabsList.map(eachTab => (
+                <TabItem
+                  key={eachTab.tabId}
+                  tabItemDetails={eachTab}
+                  clickTabItem={this.clickTabItem}
+                  isActive={activeTabId === eachTab.tabId}
+                />
+              ))}
+            </ul>
+            <ul className="thumbnails-container">
+              {activeTabThumbnailsList.map(eachThumbnail => (
+                <Thumbnails
+                  key={eachThumbnail.id}
+                  eachThumbnailDetails={eachThumbnail}
+                  clickedThumbnailItem={this.clickedThumbnailItem}
+                />
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     )
   }
